@@ -1,0 +1,55 @@
+---
+title: "PlotSelection"
+author: "Bruno Hérault"
+date: "2/19/2018"
+output: 
+  github_document:
+  toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Plot description
+
+In the loundoungo site, we have 4 times 9ha plots, each plot being subdivided into 9 times 1ha subplots.
+In the following are basic statistics of the subplots we have in hand.
+
+```{r summary, echo=FALSE}
+data<-read.csv2(file="BilanTot.csv")
+names(data)[1]<-"bloc"
+summary(data[,3:5])
+```
+
+Now density plots to assess variability visually
+
+```{r density, echo=FALSE, warning=FALSE}
+library(ggplot2)
+ggplot(data,aes(x=N, fill=bloc)) + geom_density(alpha=0.5)
+ggplot(data,aes(x=BA, fill=bloc)) + geom_density(alpha=0.5)
+ggplot(data,aes(x=AGB, fill=bloc)) + geom_density(alpha=0.5)
+```
+
+# High-intensity plots
+
+Subplots that are located in the middle of each plot will be both prioritized and intensively monitored, meaning that 1/. the deadwood work will start here and 2/. the 4 already-set-up subsubplots will be all sampled for small stems, FIRST.
+
+Subplots number are: 198, 114, 144, 305
+Below are they summarized characteristics.
+
+```{r pressure, echo=FALSE}
+data[data$plot %in% c(198,114,144,305),1:5]
+```
+
+# Low-intensity plots
+*The goal is to sample all subplots. We all agree on that.*
+Nevertheless, we look for the best subplot ranking in order to prevent our results from time problems.
+
+To do so we use the package *randomizr*. We used the Blocked and Clustered assignment algorythm. Cluster here refer to our plots. And we will define blocks in each cluster according to the stand charcateristics. Because AGB and BA are highly correlated, we keep the first on to define blocks.
+
+```{r cor, echo=FALSE}
+cor.test(data$AGB, data$BA)
+```
+
+xx
