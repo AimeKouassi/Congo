@@ -1,10 +1,10 @@
 ---
-title: "PlotSelection"
+title: "Plot Selection"
 author: "Bruno Hérault"
 date: "2/19/2018"
 output: 
   github_document:
-  toc: true
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
@@ -13,13 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Plot description
 
-In the loundoungo site, we have 4 times 9ha plots, each plot being subdivided into 9 times 1ha subplots.
+In the Loundoungo site, we have 4 times 9ha plots, each plot being subdivided into 9 times 1ha subplots.
 In the following are basic statistics of the subplots we have in hand.
 
 ```{r summary, echo=FALSE}
 data<-read.csv2(file="BilanTot.csv")
 names(data)[1]<-"bloc"
-summary(data[,3:5])
+summary(data[1:36,3:5])
 ```
 
 Now density plots to assess variability visually
@@ -31,25 +31,143 @@ ggplot(data,aes(x=BA, fill=bloc)) + geom_density(alpha=0.5)
 ggplot(data,aes(x=AGB, fill=bloc)) + geom_density(alpha=0.5)
 ```
 
-# High-intensity plots
+# High-intensity plots (Priority 1)
 
 Subplots that are located in the middle of each plot will be both prioritized and intensively monitored, meaning that 1/. the deadwood work will start here and 2/. the 4 already-set-up subsubplots will be all sampled for small stems, FIRST.
 
 Subplots number are: 198, 114, 144, 305
-Below are they summarized characteristics.
+Below are they summarized characteristics and their position in the N-AGB space.
 
 ```{r pressure, echo=FALSE}
 data[data$plot %in% c(198,114,144,305),1:5]
+data$priority<-0
+data[data$plot %in% c(198,114,144,305),]$priority<-1
+data$priority<-as.factor(data$priority)
+ggplot(data[1:36,], aes(x=N, y=AGB, color=priority, shape=bloc)) +
+  geom_point()
 ```
 
 # Low-intensity plots
 *The goal is to sample all subplots. We all agree on that.*
-Nevertheless, we look for the best subplot ranking in order to prevent our results from time problems.
-
-To do so we use the package *randomizr*. We used the Blocked and Clustered assignment algorythm. Cluster here refer to our plots. And we will define blocks in each cluster according to the stand charcateristics. Because AGB and BA are highly correlated, we keep the first on to define blocks.
+Nevertheless, we look for the best subplot ranking in order to prevent our results from time problems. Because AGB and BA are highly correlated, we keep the first on to define the sampling procedure.
 
 ```{r cor, echo=FALSE}
 cor.test(data$AGB, data$BA)
+ggplot(data[1:36,], aes(x=BA, y=AGB, color=bloc, shape=bloc)) +
+  geom_point() + 
+  geom_smooth(method=lm)
 ```
 
-xx
+The procedure is the following, we calculate the distance matrix between normalized AGB and N values and then we chose within each plot the maximum distance to select the first 2 subplots to be samlpled. And so on. Doing so we will define 4 priority levels.
+
+## Priority 2
+```{r prior2, echo=FALSE}
+data1<-data[!data$plot %in% c("198","114", "144", "305"),]
+data1<-data1[1:32, 1:5]
+plot<-c()
+dist<-as.matrix(dist(data.frame(scale(data1[1:8,]$N),scale(data1[1:8,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2],]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2],]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[9:16,]$N),scale(data1[9:16,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+8,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+8,]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[17:24,]$N),scale(data1[17:24,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+16,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+16,]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[25:32,]$N),scale(data1[25:32,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+24,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+24,]$plot)
+```
+
+The list of subplots of priority 2 is thus the following:
+
+```{r prior2list, echo=FALSE}
+plot
+data$priority<-as.numeric(as.character(data$priority))
+data[data$plot %in% plot,]$priority<-2
+```
+
+## Priority 3
+```{r prior3, echo=FALSE}
+data1<-data1[!data1$plot %in% plot,]
+plot<-c()
+dist<-as.matrix(dist(data.frame(scale(data1[1:6,]$N),scale(data1[1:6,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2],]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2],]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[7:12,]$N),scale(data1[7:12,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+6,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+6,]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[13:18,]$N),scale(data1[13:18,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+12,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+12,]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[19:24,]$N),scale(data1[19:24,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+18,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+18,]$plot)
+```
+
+The list of subplots of priority 3 is thus the following:
+
+```{r prior3list, echo=FALSE}
+plot
+data[data$plot %in% plot,]$priority<-3
+```
+
+## Priority 4
+```{r prior4, echo=FALSE}
+data1<-data1[!data1$plot %in% plot,]
+plot<-c()
+dist<-as.matrix(dist(data.frame(scale(data1[1:4,]$N),scale(data1[1:4,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2],]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2],]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[5:8,]$N),scale(data1[5:8,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+4,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+4,]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[9:12,]$N),scale(data1[9:12,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+8,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+8,]$plot)
+
+dist<-as.matrix(dist(data.frame(scale(data1[13:16,]$N),scale(data1[13:16,]$AGB))))
+data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+12,]
+plot<-c(plot,data1[which(dist == max(dist) & dist > 0, arr.ind = T)[1:2]+12,]$plot)
+```
+
+The list of subplots of priority 4 is thus the following:
+
+```{r prior4list, echo=FALSE}
+plot
+data[data$plot %in% plot,]$priority<-4
+```
+
+## Priority 5
+
+The remaining subplots are:
+
+```{r prior5, echo=FALSE}
+data1<-data1[!data1$plot %in% plot,]
+data1
+data[data$plot %in% data1$plot,]$priority<-5
+```
+
+# Overview of the sampling in the N-AGB space
+
+```{r priorplot, echo=FALSE}
+data$priority<-as.factor(as.character(data$priority))
+ggplot(data[1:36,], aes(x=N, y=AGB, color=priority, shape=bloc)) +
+  geom_point() +
+  geom_text(aes(label=plot),hjust=0, vjust=0, size=3)
+```
+
+Visually, we can see that we cath the extreme with priority 2. priority 5 are in the middle of the graph. Other priority levels in-between.
+
+Mes amitiés à vos animaux de compagnie.
+
+
+
