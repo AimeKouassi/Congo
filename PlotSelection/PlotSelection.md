@@ -3,30 +3,54 @@ PlotSelection
 Bruno Hérault
 2/19/2018
 
-R Markdown
-----------
+Plot description
+================
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+In the loundoungo site, we have 4 times 9ha plots, each plot being subdivided into 9 times 1ha subplots. In the following are basic statistics of the subplots we have in hand.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+    ##        N               BA             AGB       
+    ##  Min.   :262.0   Min.   :21.30   Min.   :276.4  
+    ##  1st Qu.:327.8   1st Qu.:25.10   1st Qu.:380.0  
+    ##  Median :352.5   Median :27.30   Median :439.6  
+    ##  Mean   :346.8   Mean   :27.58   Mean   :432.6  
+    ##  3rd Qu.:370.8   3rd Qu.:29.62   3rd Qu.:474.4  
+    ##  Max.   :410.0   Max.   :35.90   Max.   :633.1  
+    ##  NA's   :36      NA's   :36      NA's   :36
 
-``` r
-summary(cars)
-```
+Now density plots to assess variability visually
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+![](PlotSelection_files/figure-markdown_github/density-1.png)![](PlotSelection_files/figure-markdown_github/density-2.png)![](PlotSelection_files/figure-markdown_github/density-3.png)
 
-Including Plots
----------------
+High-intensity plots
+====================
 
-You can also embed plots, for example:
+Subplots that are located in the middle of each plot will be both prioritized and intensively monitored, meaning that 1/. the deadwood work will start here and 2/. the 4 already-set-up subsubplots will be all sampled for small stems, FIRST.
 
-![](PlotSelection_files/figure-markdown_github/pressure-1.png)
+Subplots number are: 198, 114, 144, 305 Below are they summarized characteristics.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+    ##    bloc plot   N   BA   AGB
+    ## 5    E1  144 360 24.3 333.5
+    ## 14   E2  305 410 27.4 360.5
+    ## 20   O1  114 302 27.1 389.9
+    ## 32   O2  198 363 29.7 446.8
+
+Low-intensity plots
+===================
+
+*The goal is to sample all subplots. We all agree on that.* Nevertheless, we look for the best subplot ranking in order to prevent our results from time problems.
+
+To do so we use the package *randomizr*. We used the Blocked and Clustered assignment algorythm. Cluster here refer to our plots. And we will define blocks in each cluster according to the stand charcateristics. Because AGB and BA are highly correlated, we keep the first on to define blocks.
+
+    ## 
+    ##  Pearson's product-moment correlation
+    ## 
+    ## data:  data$AGB and data$BA
+    ## t = 14.749, df = 34, p-value = 2.441e-16
+    ## alternative hypothesis: true correlation is not equal to 0
+    ## 95 percent confidence interval:
+    ##  0.8660177 0.9639780
+    ## sample estimates:
+    ##       cor 
+    ## 0.9299626
+
+xx
