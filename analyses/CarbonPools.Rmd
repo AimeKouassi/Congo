@@ -13,6 +13,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Research Questions
+*What is the magnitude of carbon pools in deadwood and small stems as compared to standard AGB (>10 DBH) ?*
+
+*Are there some ecologically-sound relationships between the 3 pools?*
+
+*What is the level of environmental control on pools and relationships?*
+
 # Dead Biomass
 
 ```{r DB upload, include=FALSE}
