@@ -71,7 +71,59 @@ library(date)
 lwd$dateJ<-julian(strptime(lwd$date, "%d/%m/%Y"))
 ```
 
-test 
+```{r DB upload 2, include=FALSE}
+d93<-read.csv2("d93.csv",header = TRUE)
+d94<-read.csv2("d94.csv",header = TRUE)
+d95<-read.csv2("d95.csv",header = TRUE)
+d113<-read.csv2("d113.csv",header = TRUE)
+d114<-read.csv2("d114.csv",header = TRUE)
+d115<-read.csv2("d115.csv",header = TRUE)
+d123<-read.csv2("d123.csv",header = TRUE)
+d124<-read.csv2("d124.csv",header = TRUE)
+d125<-read.csv2("d125.csv",header = TRUE)
+d133<-read.csv2("d133.csv",header = TRUE)
+d134<-read.csv2("d134.csv",header = TRUE)
+d135<-read.csv2("d135.csv",header = TRUE)
+d143<-read.csv2("d143.csv",header = TRUE)
+d144<-read.csv2("d144.csv",header = TRUE)
+d145<-read.csv2("d145.csv",header = TRUE)
+d163<-read.csv2("d163.csv",header = TRUE)
+d164<-read.csv2("d164.csv",header = TRUE)
+d165<-read.csv2("d165.csv",header = TRUE)
+d177<-read.csv2("d177.csv",header = TRUE)
+d178<-read.csv2("d178.csv",header = TRUE)
+d179<-read.csv2("d179.csv",header = TRUE)
+d197<-read.csv2("d197.csv",header = TRUE)
+d198<-read.csv2("d198.csv",header = TRUE)
+d199<-read.csv2("d199.csv",header = TRUE)
+d217<-read.csv2("d217.csv",header = TRUE)
+d218<-read.csv2("d218.csv",header = TRUE)
+d219<-read.csv2("d219.csv",header = TRUE)
+d284<-read.csv2("d284.csv",header = TRUE)
+d285<-read.csv2("d285.csv",header = TRUE)
+d286<-read.csv2("d286.csv",header = TRUE)
+d304<-read.csv2("d304.csv",header = TRUE)
+d305<-read.csv2("d305.csv",header = TRUE)
+d306<-read.csv2("d306.csv",header = TRUE)
+d324<-read.csv2("d324.csv",header = TRUE)
+d325<-read.csv2("d325.csv",header = TRUE)
+d326<-read.csv2("d326.csv",header = TRUE)
+swd<-rbind(d93, d94, d95, d113, d114, d115, d123, d124, d125, d133, d134, d135, 
+           d143, d144, d145, d163, d164, d165, d177, d178, d179, d197, d198, d199, d217, 
+           d218, d219, d284, d285, d286, d304, d305, d306, d324, d325, d326)  # swd's data combinations = swd
+# rename / arrange some column's name on swd's data
+colnames(swd)[1]<-"n"
+colnames(swd)[2]<-"x"
+colnames(swd)[3]<-"y"
+colnames(swd)[4]<-"circDBH"
+colnames(swd)[5]<-"circlow"
+colnames(swd)[6]<-"circhigh"
+swd$treeID<-paste(swd$n, swd$plot, swd$square, swd$transect, sep = "_") # creation of treelwdID
+# convert to julian date for the new lwd1's data
+library(date)
+swd$dateJ<-julian(strptime(swd$date, "%d/%m/%Y"))
+str(swd)
+```
 
 ## Descriptive Statistics
 
