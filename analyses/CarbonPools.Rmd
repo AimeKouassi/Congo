@@ -134,11 +134,72 @@ str(swd)
 # Small Stems
 
 ```{r SS upload, include=FALSE}
-
+tig1=read.csv2("tig1.csv")
+tig2=read.csv2("tig2.csv")
+tig3=read.csv2("tig3.csv")
+tig4=read.csv2("tig4.csv")
+tig5=read.csv2("tig5.csv")
+tig6=read.csv2("tig6.csv")
+tig7=read.csv2("tig7.csv")
+tig8=read.csv2("tig8.csv")
+tig9=read.csv2("tig9.csv")
+tig10=read.csv2("tig10.csv")
+tig11=read.csv2("tig11.csv")
+tig12=read.csv2("tig12.csv")
+tig13=read.csv2("tig13.csv")
+tig14=read.csv2("tig14.csv")
+tig15=read.csv2("tig15.csv")
+tig16=read.csv2("tig16.csv")
+tig17=read.csv2("tig17.csv")
+tig18=read.csv2("tig18.csv")
+tig19=read.csv2("tig19.csv")
+tig20=read.csv2("tig20.csv")
+tig21=read.csv2("tig21.csv")
+tig22=read.csv2("tig22.csv")
+tig23=read.csv2("tig23.csv")
+tig24=read.csv2("tig24.csv")
+tig25=read.csv2("tig25.csv")
+tig26=read.csv2("tig26.csv")
+tig27=read.csv2("tig27.csv")
+tig28=read.csv2("tig28.csv")
+tig29=read.csv2("tig29.csv")
+tig30=read.csv2("tig30.csv")
+tig31=read.csv2("tig31.csv")
+tig32=read.csv2("tig32.csv")
+tig33=read.csv2("tig33.csv")
+tig34=read.csv2("tig34.csv")
+tig35=read.csv2("tig35.csv")
+tig36=read.csv2("tig36.csv")
+tig37=read.csv2("tig37.csv")
+tig38=read.csv2("tig38.csv")
+tig39=read.csv2("tig39.csv")
+tig40=read.csv2("tig40.csv")
+tig41=read.csv2("tig41.csv")
+tig42=read.csv2("tig42.csv")
+tig43=read.csv2("tig43.csv")
+tig44=read.csv2("tig44.csv")
+tig45=read.csv2("tig45.csv")
+tig46=read.csv2("tig46.csv")
+tig47=read.csv2("tig47.csv")
+tig48=read.csv2("tig48.csv")
+colnames(tig10)[9]="DBH"
+tabx<-rbind(tig1,tig2, tig3, tig4,tig5,tig6,tig7,tig8,tig9,tig10,tig11,tig12,tig13,tig14,tig15,tig16,tig17,tig18,tig19,tig20,tig21,tig22,tig23,tig24,tig25,tig26,tig27,tig28,tig29,tig30,tig31,tig32,tig33,tig34,tig35,tig36,tig37,tig38,tig39,tig40,tig41,tig42,tig43,tig44,tig45,tig46,tig47,tig48)
+colnames(tabx)[2]="bloc"
+colnames(tabx)[3]="plot"
+colnames(tabx)[4]="n"
+colnames(tabx)[5]="vernacularname"
+colnames(tabx)[2]="bloc"
+colnames(tabx)[6]="g"
+colnames(tabx)[7]="sp"
+colnames(tabx)[8]="h"
+colnames(tabx)[10]="q"
+tabx$treeID<-paste(tabx$bloc, tabx$plot, tabx$q, tabx$n, sep = "_")
+tabx$dateJ<-julian(strptime(tabx$DATE, "%d/%m/%Y"))
 ```
 
 ## Descriptive Statistics
-
+ to do 
+ 
 ## Estimating Carbon Pool Values
 
 ## Estimating Carbon Pool Variabilities
