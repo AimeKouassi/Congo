@@ -71,6 +71,8 @@ library(date)
 lwd$dateJ<-julian(strptime(lwd$date, "%d/%m/%Y"))
 ```
 
+test 
+
 ## Descriptive Statistics
 
 ## Estimating Carbon Pool Values
