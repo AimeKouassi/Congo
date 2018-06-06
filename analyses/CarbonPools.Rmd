@@ -22,8 +22,53 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Dead Biomass
 
-```{r DB upload, include=FALSE}
-
+```{r DB upload 1, include=FALSE}
+c93<-read.csv2("c93.csv",header = TRUE)
+c94<-read.csv2("c94.csv",header = TRUE)
+c95<-read.csv2("c95.csv",header = TRUE)
+c113<-read.csv2("c113.csv",header = TRUE)
+c114<-read.csv2("c114.csv",header = TRUE)
+c115<-read.csv2("c115.csv",header = TRUE)
+c123<-read.csv2("c123.csv",header = TRUE)
+c124<-read.csv2("c124.csv",header = TRUE)
+c125<-read.csv2("c125.csv",header = TRUE)
+c133<-read.csv2("c133.csv",header = TRUE)
+c134<-read.csv2("c134.csv",header = TRUE)
+c135<-read.csv2("c135.csv",header = TRUE)
+c143<-read.csv2("c143.csv",header = TRUE)
+c144<-read.csv2("c144.csv",header = TRUE)
+c145<-read.csv2("c145.csv",header = TRUE)
+c163<-read.csv2("c163.csv",header = TRUE)
+c164<-read.csv2("c164.csv",header = TRUE)
+c165<-read.csv2("c165.csv",header = TRUE)
+c177<-read.csv2("c177.csv",header = TRUE)
+c178<-read.csv2("c178.csv",header = TRUE)
+c179<-read.csv2("c179.csv",header = TRUE)
+c197<-read.csv2("c197.csv",header = TRUE)
+c198<-read.csv2("c198.csv",header = TRUE)
+c199<-read.csv2("c199.csv",header = TRUE)
+c217<-read.csv2("c217.csv",header = TRUE)
+c218<-read.csv2("c218.csv",header = TRUE)
+c219<-read.csv2("c219.csv",header = TRUE)
+c284<-read.csv2("c284.csv",header = TRUE)
+c285<-read.csv2("c285.csv",header = TRUE)
+c286<-read.csv2("c286.csv",header = TRUE)
+c304<-read.csv2("c304.csv",header = TRUE)
+c305<-read.csv2("c305.csv",header = TRUE)
+c306<-read.csv2("c306.csv",header = TRUE)
+c324<-read.csv2("c324.csv",header = TRUE)
+c325<-read.csv2("c325.csv",header = TRUE)
+c326<-read.csv2("c326.csv",header = TRUE)
+lwd<-rbind(c93, c94, c95, c113, c114, c115, c123, c124, c125, c133, c134, c135, 
+           c143, c144, c145, c163, c164, c165, c177, c178, c179, c197, c198, c199, c217, 
+           c218, c219, c284, c285, c286, c304, c305, c306, c324, c325, c326) # lwd's data combinations = lwd
+# rename / arrange some column's name on lwd's data
+colnames(lwd)[1]<-"n"
+colnames(lwd)[2]<-"x"
+lwd$treeID<-paste(lwd$n, lwd$plot, lwd$square, lwd$transect, sep = "_") # creation of treelwdID
+# convert to julian date for the new lwd1's data
+library(date)
+lwd$dateJ<-julian(strptime(lwd$date, "%d/%m/%Y"))
 ```
 
 ## Descriptive Statistics
