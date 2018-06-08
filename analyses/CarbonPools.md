@@ -10,6 +10,10 @@ Lattifa Fofana, Aimé Kouassi, Eric Forni, Sylvie Gourlet-Fleury & Bruno Héraul
     -   [Estimating Carbon Pool Variabilities](#estimating-carbon-pool-variabilities)
 -   [Small Stems](#small-stems)
     -   [Descriptive Statistics](#descriptive-statistics-1)
+        -   [Stem Density](#stem-density)
+        -   [DBH Distribution](#dbh-distribution)
+        -   [Height Distribution](#height-distribution)
+        -   [Basic Correlations](#basic-correlations)
     -   [Estimating Carbon Pool Values](#estimating-carbon-pool-values-1)
     -   [Estimating Carbon Pool Variabilities](#estimating-carbon-pool-variabilities-1)
 -   [AboveGround Biomass](#aboveground-biomass)
@@ -45,7 +49,19 @@ Small Stems
 Descriptive Statistics
 ----------------------
 
-to do
+### Stem Density
+
+![](CarbonPools_files/figure-markdown_github/DS_SS-1.png)
+
+### DBH Distribution
+
+![](CarbonPools_files/figure-markdown_github/DBH_SS-1.png)
+
+### Height Distribution
+
+![](CarbonPools_files/figure-markdown_github/HEIGHT_SS-1.png)
+
+### Basic Correlations
 
 Estimating Carbon Pool Values
 -----------------------------

@@ -9,10 +9,6 @@ output:
     df_print: paged
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 # Research Questions
 *What is the magnitude of carbon pools in deadwood and small stems as compared to standard AGB (>10 DBH) ?*
 
@@ -134,71 +130,130 @@ str(swd)
 # Small Stems
 
 ```{r SS upload, include=FALSE}
-tig1=read.csv2("tig1.csv")
-tig2=read.csv2("tig2.csv")
-tig3=read.csv2("tig3.csv")
-tig4=read.csv2("tig4.csv")
-tig5=read.csv2("tig5.csv")
-tig6=read.csv2("tig6.csv")
-tig7=read.csv2("tig7.csv")
-tig8=read.csv2("tig8.csv")
-tig9=read.csv2("tig9.csv")
-tig10=read.csv2("tig10.csv")
-tig11=read.csv2("tig11.csv")
-tig12=read.csv2("tig12.csv")
-tig13=read.csv2("tig13.csv")
-tig14=read.csv2("tig14.csv")
-tig15=read.csv2("tig15.csv")
-tig16=read.csv2("tig16.csv")
-tig17=read.csv2("tig17.csv")
-tig18=read.csv2("tig18.csv")
-tig19=read.csv2("tig19.csv")
-tig20=read.csv2("tig20.csv")
-tig21=read.csv2("tig21.csv")
-tig22=read.csv2("tig22.csv")
-tig23=read.csv2("tig23.csv")
-tig24=read.csv2("tig24.csv")
-tig25=read.csv2("tig25.csv")
-tig26=read.csv2("tig26.csv")
-tig27=read.csv2("tig27.csv")
-tig28=read.csv2("tig28.csv")
-tig29=read.csv2("tig29.csv")
-tig30=read.csv2("tig30.csv")
-tig31=read.csv2("tig31.csv")
-tig32=read.csv2("tig32.csv")
-tig33=read.csv2("tig33.csv")
-tig34=read.csv2("tig34.csv")
-tig35=read.csv2("tig35.csv")
-tig36=read.csv2("tig36.csv")
-tig37=read.csv2("tig37.csv")
-tig38=read.csv2("tig38.csv")
-tig39=read.csv2("tig39.csv")
-tig40=read.csv2("tig40.csv")
-tig41=read.csv2("tig41.csv")
-tig42=read.csv2("tig42.csv")
-tig43=read.csv2("tig43.csv")
-tig44=read.csv2("tig44.csv")
-tig45=read.csv2("tig45.csv")
-tig46=read.csv2("tig46.csv")
-tig47=read.csv2("tig47.csv")
-tig48=read.csv2("tig48.csv")
+tig1=read.csv2("ti1.csv")
+tig2=read.csv2("ti2.csv")
+tig3=read.csv2("ti3.csv")
+tig4=read.csv2("ti4.csv")
+tig5=read.csv2("ti5.csv")
+tig5$X<-NULL
+tig6=read.csv2("ti6.csv")
+tig7=read.csv2("ti7.csv")
+tig8=read.csv2("ti8.csv")
+tig9=read.csv2("ti9.csv")
+tig10=read.csv2("ti10.csv")
+tig11=read.csv2("ti11.csv")
+tig12=read.csv2("ti12.csv")
+tig13=read.csv2("ti13.csv")
+tig14=read.csv2("ti14.csv")
+tig15=read.csv2("ti15.csv")
+tig16=read.csv2("ti16.csv")
+tig17=read.csv2("ti17.csv")
+tig18=read.csv2("ti18.csv")
+tig19=read.csv2("ti19.csv")
+tig20=read.csv2("ti20.csv")
+tig21=read.csv2("ti21.csv")
+tig22=read.csv2("ti22.csv")
+tig23=read.csv2("ti23.csv")
+tig24=read.csv2("ti24.csv")
+tig25=read.csv2("ti25.csv")
+tig26=read.csv2("ti26.csv")
+tig27=read.csv2("ti27.csv")
+tig28=read.csv2("ti28.csv")
+tig29=read.csv2("ti29.csv")
+tig30=read.csv2("ti30.csv")
+tig31=read.csv2("ti31.csv")
+tig32=read.csv2("ti32.csv")
+tig33=read.csv2("ti33.csv")
+tig34=read.csv2("ti34.csv")
+tig35=read.csv2("ti35.csv")
+tig36=read.csv2("ti36.csv")
+tig37=read.csv2("ti37.csv")
+tig38=read.csv2("ti38.csv")
+tig39=read.csv2("ti39.csv")
+tig40=read.csv2("ti40.csv")
+tig41=read.csv2("ti41.csv")
+tig42=read.csv2("ti42.csv")
+tig43=read.csv2("ti43.csv")
+tig44=read.csv2("ti44.csv")
+tig45=read.csv2("ti45.csv")
+tig46=read.csv2("ti46.csv")
+tig47=read.csv2("ti47.csv")
+tig48=read.csv2("ti48.csv")
 colnames(tig10)[9]="DBH"
 tabx<-rbind(tig1,tig2, tig3, tig4,tig5,tig6,tig7,tig8,tig9,tig10,tig11,tig12,tig13,tig14,tig15,tig16,tig17,tig18,tig19,tig20,tig21,tig22,tig23,tig24,tig25,tig26,tig27,tig28,tig29,tig30,tig31,tig32,tig33,tig34,tig35,tig36,tig37,tig38,tig39,tig40,tig41,tig42,tig43,tig44,tig45,tig46,tig47,tig48)
-colnames(tabx)[2]="bloc"
-colnames(tabx)[3]="plot"
+colnames(tabx)[2]="plot"
+colnames(tabx)[3]="subplot"
 colnames(tabx)[4]="n"
 colnames(tabx)[5]="vernacularname"
-colnames(tabx)[2]="bloc"
+colnames(tabx)[2]="plot"
 colnames(tabx)[6]="g"
 colnames(tabx)[7]="sp"
 colnames(tabx)[8]="h"
-colnames(tabx)[10]="q"
-tabx$treeID<-paste(tabx$bloc, tabx$plot, tabx$q, tabx$n, sep = "_")
+colnames(tabx)[10]="quadrat"
+tabx$treeID<-paste(tabx$plot, tabx$subplot, tabx$quadrat, tabx$n, sep = "_")
 tabx$dateJ<-julian(strptime(tabx$DATE, "%d/%m/%Y"))
+tabx$plot<-as.character(tabx$plot)
+tabx[tabx$plot=="1 ouest",]$plot<-"1W"
+tabx[tabx$plot=="2 ouest",]$plot<-"2W"
+tabx[tabx$plot=="2 OUEST",]$plot<-"2W"
+tabx[tabx$plot=="2 Est",]$plot<-"2E"
+tabx[tabx$plot=="2 EST",]$plot<-"2E"
+tabx[tabx$plot=="1 EST",]$plot<-"1E"
+tabx[tabx$plot=="1 OUEST",]$plot<-"1W"
+tabx[tabx$plot=="1 OESUT",]$plot<-"1W"
 ```
 
 ## Descriptive Statistics
- to do 
+
+### Stem Density
+
+```{r DS_SS, include=TRUE, echo=FALSE}
+library(knitr)
+SS_quadrat<-data.frame(subplot=names(table(tabx$subplot)), N=as.numeric(table(tabx$subplot)))
+SS_quadrat[SS_quadrat$subplot %in% c(114, 144, 198, 305),]$N<-SS_quadrat[SS_quadrat$subplot %in% c(114, 144, 198, 305),]$N/4
+SS_quadrat<-merge(SS_quadrat, unique(data.frame(plot=tabx$plot, subplot=tabx$subplot)), by.x="subplot", by.y="subplot")
+SS_quadrat$N<-SS_quadrat$N/400*10000
+library(ggplot2)
+library(devtools)
+g <- ggplot(SS_quadrat, aes(N))
+g + geom_density(aes(fill=factor(plot)), alpha=0.5) + 
+    labs(title="Small Stem Density Plot", 
+         subtitle="Observed Absolute Frequencies grouped per plot",
+         caption="Source: DynAfFor",
+         x="N Small Stems (per ha)",
+         fill="# Plot Names")
+```
+
+### DBH Distribution
+
+```{r DBH_SS, include=TRUE, echo=FALSE}
+library(ggplot2)
+ggplot(tabx, aes(x = DBH, fill = plot)) +
+        geom_histogram(binwidth = 0.5, alpha = 1, position = "dodge")+
+      labs(title="DBH Distribution", 
+         subtitle="Observed Absolute Frequencies grouped per plot",
+         caption="Source: DynAfFor",
+         x="DBH (cm)",
+         y="Absolute Frequencies",
+         fill="# Plot Names")
+```
+
+
+### Height Distribution
+
+```{r HEIGHT_SS, include=TRUE, echo=FALSE}
+library(ggplot2)
+ggplot(tabx, aes(x = h, fill = plot)) +
+        geom_histogram(binwidth = 0.5, alpha = 1, position = "dodge")+
+      labs(title="Height Distribution", 
+         subtitle="Observed Absolute Frequencies grouped per plot",
+         caption="Source: DynAfFor",
+         x="Height (m)",
+         y="Absolute Frequencies",
+         fill="# Plot Names")
+```
+
+### Basic Correlations
  
 ## Estimating Carbon Pool Values
 
