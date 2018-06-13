@@ -6,7 +6,8 @@ Lattifa Fofana, Aimé Kouassi, Eric Forni, Sylvie Gourlet-Fleury & Bruno Héraul
 -   [Research Questions](#research-questions)
 -   [Dead Biomass](#dead-biomass)
     -   [Descriptive Statistics](#descriptive-statistics)
-    -   [Estimating Carbon Pool Values](#estimating-carbon-pool-values)
+        -   [Lying Deadwood](#lying-deadwood)
+        -   [Standing Deadwood](#standing-deadwood)
     -   [Estimating Carbon Pool Variabilities](#estimating-carbon-pool-variabilities)
 -   [Small Stems](#small-stems)
     -   [Descriptive Statistics](#descriptive-statistics-1)
@@ -14,13 +15,12 @@ Lattifa Fofana, Aimé Kouassi, Eric Forni, Sylvie Gourlet-Fleury & Bruno Héraul
         -   [DBH Distribution](#dbh-distribution)
         -   [Height Distribution](#height-distribution)
         -   [Basic Correlations](#basic-correlations)
-    -   [Estimating Carbon Pool Values](#estimating-carbon-pool-values-1)
+    -   [Estimating Carbon Pool Values](#estimating-carbon-pool-values)
     -   [Estimating Carbon Pool Variabilities](#estimating-carbon-pool-variabilities-1)
 -   [AboveGround Biomass](#aboveground-biomass)
+    -   [Basic Checks](#basic-checks)
     -   [Results from BIOMASS package](#results-from-biomass-package)
--   [Linking the 3 carbon pools](#linking-the-3-carbon-pools)
-    -   [Results](#results)
-    -   [Discussion](#discussion)
+-   [Linking the 3 carbon pools together](#linking-the-3-carbon-pools-together)
 
 Research Questions
 ==================
@@ -37,8 +37,33 @@ Dead Biomass
 Descriptive Statistics
 ----------------------
 
-Estimating Carbon Pool Values
------------------------------
+### Lying Deadwood
+
+#### Density
+
+![](CarbonPools_files/figure-markdown_github/D%20density-1.png)
+
+#### DBH
+
+![](CarbonPools_files/figure-markdown_github/DBH%20distribution-1.png)
+
+#### Length
+
+![](CarbonPools_files/figure-markdown_github/Length%20distribution-1.png)
+
+### Standing Deadwood
+
+#### Density
+
+![](CarbonPools_files/figure-markdown_github/standing%20density-1.png)
+
+#### DBH
+
+![](CarbonPools_files/figure-markdown_github/standing%20DBH-1.png)
+
+#### Height
+
+![](CarbonPools_files/figure-markdown_github/standing%20Height-1.png) \#\# Estimating Carbon Pool Values
 
 Estimating Carbon Pool Variabilities
 ------------------------------------
@@ -72,14 +97,11 @@ Estimating Carbon Pool Variabilities
 AboveGround Biomass
 ===================
 
+Basic Checks
+------------
+
 Results from BIOMASS package
 ----------------------------
 
-Linking the 3 carbon pools
-==========================
-
-Results
--------
-
-Discussion
-----------
+Linking the 3 carbon pools together
+===================================

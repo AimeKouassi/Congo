@@ -61,10 +61,22 @@ lwd<-rbind(c93, c94, c95, c113, c114, c115, c123, c124, c125, c133, c134, c135,
 # rename / arrange some column's name on lwd's data
 colnames(lwd)[1]<-"n"
 colnames(lwd)[2]<-"x"
+colnames(lwd)[13]<-"subplot"
+lwd$plot<-as.character(lwd$plot)
+lwd[lwd$plot=="1 Ouest",]$plot<-"1W"
+lwd[lwd$plot=="2 Ouest",]$plot<-"2W"
+lwd[lwd$plot=="1 Est",]$plot<-"1E"
+lwd[lwd$plot=="2 Est",]$plot<-"2E"
 lwd$treeID<-paste(lwd$n, lwd$plot, lwd$square, lwd$transect, sep = "_") # creation of treelwdID
 # convert to julian date for the new lwd1's data
 library(date)
 lwd$dateJ<-julian(strptime(lwd$date, "%d/%m/%Y"))
+# replace 0's by NA's on lwd$Dh
+lwd$Dh[lwd$Dh == 0]= NA
+# replace 0's by NA's on lwd$Circumf
+lwd$circumf[lwd$circumf == 0]= NA
+# calculation of geometric mean diameters Dg               		
+lwd$Dg=exp(rowMeans(log(data.frame(lwd$Dh,lwd$Dv)), na.rm=TRUE)) 
 ```
 
 ```{r DB upload 2, include=FALSE}
@@ -107,22 +119,148 @@ d326<-read.csv2("d326.csv",header = TRUE)
 swd<-rbind(d93, d94, d95, d113, d114, d115, d123, d124, d125, d133, d134, d135, 
            d143, d144, d145, d163, d164, d165, d177, d178, d179, d197, d198, d199, d217, 
            d218, d219, d284, d285, d286, d304, d305, d306, d324, d325, d326)  # swd's data combinations = swd
+# omit value's adding on swd
+swd$CIRCdbh[45]= 34
+swd$CIRCdbh[291]= 82
+swd$CIRCdbh[339]= 33
 # rename / arrange some column's name on swd's data
 colnames(swd)[1]<-"n"
 colnames(swd)[2]<-"x"
 colnames(swd)[3]<-"y"
-colnames(swd)[4]<-"circDBH"
-colnames(swd)[5]<-"circlow"
-colnames(swd)[6]<-"circhigh"
+colnames(swd)[4]<-"DBH"
+colnames(swd)[5]<-"Dlow"
+colnames(swd)[6]<-"Dhigh"
+# calculate diameter
+swd$DBH=swd$DBH/pi
+swd$Dlow=swd$Dlow/pi
+swd$Dhigh=swd$Dhigh/pi
+colnames(swd)[13]<-"subplot"
+swd$plot<-as.character(swd$plot)
+swd[swd$plot=="1 Ouest",]$plot<-"1W"
+swd[swd$plot=="2 Ouest",]$plot<-"2W"
+swd[swd$plot=="1 Est",]$plot<-"1E"
+swd[swd$plot=="2 Est",]$plot<-"2E"
+# creation of treelwdID
 swd$treeID<-paste(swd$n, swd$plot, swd$square, swd$transect, sep = "_") # creation of treelwdID
 # convert to julian date for the new lwd1's data
 library(date)
 swd$dateJ<-julian(strptime(swd$date, "%d/%m/%Y"))
-str(swd)
+# replace 0's by NA's on swd
+swd$DBH[swd$DBH == 0]= NA
+swd$Dlow[swd$Dlow == 0]= NA
+swd$Dhigh[swd$Dhigh == 0]= NA
+# db's and dt's calculation 
+# db
+library(dplyr)
+DBH = c(swd$DBH)
+Dlow = c(swd$Dlow)
+test1=tibble(DBH, Dlow )
+swd$db<-data.frame(test1 %>% transmute(DBH = ifelse(is.na(DBH), Dlow, DBH)))[,1] 
+# dt 
+dtDBH=c(1.59*swd$DBH*swd$H^{-0.091})
+dtDhigh=c(swd$Dhigh) 
+test2=tibble(dtDBH, dtDhigh)
+swd$dt<-data.frame(test2 %>% transmute(dtDBH = ifelse(is.na(dtDBH), dtDhigh, dtDBH)))[,1] 
 ```
 
 ## Descriptive Statistics
 
+### Lying Deadwood
+
+#### Density
+```{r D density, include=TRUE, echo=FALSE}
+library(knitr)
+LWD_subplot<-data.frame(subplot=names(table(lwd$subplot)), N=as.numeric(table(lwd$subplot)))
+LWD_subplot<-merge(LWD_subplot, unique(data.frame(plot=lwd$plot, subplot=lwd$subplot)), 
+                  by.x="subplot", by.y="subplot")
+LWD_subplot$N<-(LWD_subplot$N/(4*111.7))*100 # LWD mean values/subplot/100 m
+
+library(ggplot2)
+library(devtools)
+ggplot(LWD_subplot, aes(N)) + geom_density(aes(fill=factor(plot)), alpha=0.5) + 
+  labs(title="Lying deadwood Density Plot", 
+       subtitle="Observed Number of lying deadwood per 100m walking, grouped per plot",
+       caption="Source: DynAfFor",
+       x="Lying deadwood (per 100m walking)",
+       fill="# Plot Names")
+
+```
+
+#### DBH
+
+```{r DBH distribution, include=TRUE, echo=FALSE}
+library(ggplot2)
+ggplot(lwd, aes(x = Dg, fill = plot)) +
+  geom_histogram(binwidth = 10, alpha = 1, position = "dodge")+
+  labs(title="Diameter Distribution", 
+       subtitle="Observed Absolute Frequencies grouped per plot",
+       caption="Source: DynAfFor",
+       x="Diameter (cm)",
+       y="Absolute Frequencies",
+       fill="# Plot Names")
+```
+
+
+#### Length
+```{r Length distribution, include=TRUE, echo=FALSE}
+library(ggplot2)
+ggplot(lwd, aes(x = L, fill = plot)) +
+  geom_histogram(binwidth = 3, alpha = 1, position = "dodge")+
+  labs(title="Length Distribution", 
+       subtitle="Observed Absolute Frequencies grouped per plot",
+       caption="Source: DynAfFor",
+       x="Length (m)",
+       y="Absolute Frequencies",
+       fill="# Plot Names")
+```
+       
+
+### Standing Deadwood
+#### Density
+
+```{r standing density, include=TRUE, echo=FALSE}
+library(knitr)
+SWD_subplot<-data.frame(subplot=names(table(swd$subplot)), N=as.numeric(table(swd$subplot)))
+SWD_subplot<-merge(SWD_subplot, unique(data.frame(plot=swd$plot, subplot=swd$subplot)), 
+                   by.x="subplot", by.y="subplot")
+Sp= 111.7*20*4-4*20^2
+SWD_subplot$N<-SWD_subplot$N/Sp*10000
+library(ggplot2)
+library(devtools)
+ggplot(SWD_subplot, aes(N)) + geom_density(aes(fill=factor(plot)), alpha=0.5) + 
+  labs(title="Standing Deadwood Density", 
+       subtitle="Observed Number of standing deadwood per hectare, grouped per plot",
+       caption="Source: DynAfFor",
+       x="Number of standing deadwood (per ha)",
+       fill="# Plot Names")
+```
+
+#### DBH
+```{r standing DBH, include=TRUE, echo=FALSE}
+library(ggplot2)
+ggplot(swd, aes(x = db, fill = plot)) +
+  geom_histogram(binwidth = 10, alpha = 1, position = "dodge")+
+  labs(title="Base diameter (db) Distribution", 
+       subtitle="Observed Absolute Frequencies grouped per plot",
+       caption="Source: DynAfFor",
+       x="Base diameter (cm)",
+       y="Absolute Frequencies",
+       fill="# Plot Names")
+```
+
+
+#### Height
+```{r standing Height, include=TRUE, echo=FALSE}
+library(ggplot2)
+ggplot(swd, aes(x = H, fill = plot)) +
+  geom_density(aes(fill=factor(plot)), alpha=0.5)+
+  labs(title="Height Distribution", 
+       subtitle="Density curves, grouped per plot",
+       caption="Source: DynAfFor",
+       x="Height (m)",
+       fill="# Plot Names")
+
+```
 ## Estimating Carbon Pool Values
 
 ## Estimating Carbon Pool Variabilities
@@ -261,12 +399,22 @@ ggplot(tabx, aes(x = h, fill = plot)) +
 
 # AboveGround Biomass
 
+## Basic Checks
+
 ## Results from BIOMASS package
 
-# Linking the 3 carbon pools
+```{r lound data, include=TRUE, echo=FALSE}
+library(ggplot2)
+loun <- read.csv("~/Library/Mobile Documents/com~apple~CloudDocs/Bruno/Publications/Congo/Congo/analyses/Loun.csv")
+loun$bloc_parcelle<-as.character(loun$bloc_parcelle)
+loun[loun$bloc_parcelle=="bloc est/parcelle 1",]$bloc_parcelle<-"1E"
+loun[loun$bloc_parcelle=="bloc est/parcelle 2",]$bloc_parcelle<-"2E"
+loun[loun$bloc_parcelle=="bloc ouest/parcelle 1",]$bloc_parcelle<-"1W"
+loun[loun$bloc_parcelle=="bloc ouest/parcelle 2",]$bloc_parcelle<-"2W"
+library(BIOMASS)
+```
 
-## Results
 
-## Discussion
+# Linking the 3 carbon pools together
 
 
