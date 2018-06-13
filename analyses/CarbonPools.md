@@ -100,8 +100,17 @@ AboveGround Biomass
 Basic Checks
 ------------
 
+![](CarbonPools_files/figure-markdown_github/lound%20data-1.png)
+
+    ## The reference dataset contains 16467 wood density values 
+    ## Your taxonomic table contains 241 taxa
+
+![](CarbonPools_files/figure-markdown_github/wsg-1.png)
+
 Results from BIOMASS package
 ----------------------------
+
+![](CarbonPools_files/figure-markdown_github/agb-1.png)![](CarbonPools_files/figure-markdown_github/agb-2.png)
 
 Linking the 3 carbon pools together
 ===================================

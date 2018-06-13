@@ -63,10 +63,10 @@ colnames(lwd)[1]<-"n"
 colnames(lwd)[2]<-"x"
 colnames(lwd)[13]<-"subplot"
 lwd$plot<-as.character(lwd$plot)
-lwd[lwd$plot=="1 Ouest",]$plot<-"1W"
-lwd[lwd$plot=="2 Ouest",]$plot<-"2W"
-lwd[lwd$plot=="1 Est",]$plot<-"1E"
-lwd[lwd$plot=="2 Est",]$plot<-"2E"
+lwd[lwd$plot=="1 Ouest",]$plot<-"WEST-1"
+lwd[lwd$plot=="2 Ouest",]$plot<-"WEST-2"
+lwd[lwd$plot=="1 Est",]$plot<-"EAST-1"
+lwd[lwd$plot=="2 Est",]$plot<-"EAST-2"
 lwd$treeID<-paste(lwd$n, lwd$plot, lwd$square, lwd$transect, sep = "_") # creation of treelwdID
 # convert to julian date for the new lwd1's data
 library(date)
@@ -136,10 +136,10 @@ swd$Dlow=swd$Dlow/pi
 swd$Dhigh=swd$Dhigh/pi
 colnames(swd)[13]<-"subplot"
 swd$plot<-as.character(swd$plot)
-swd[swd$plot=="1 Ouest",]$plot<-"1W"
-swd[swd$plot=="2 Ouest",]$plot<-"2W"
-swd[swd$plot=="1 Est",]$plot<-"1E"
-swd[swd$plot=="2 Est",]$plot<-"2E"
+swd[swd$plot=="1 Ouest",]$plot<-"WEST-1"
+swd[swd$plot=="2 Ouest",]$plot<-"WEST-2"
+swd[swd$plot=="1 Est",]$plot<-"EAST-1"
+swd[swd$plot=="2 Est",]$plot<-"EAST-2"
 # creation of treelwdID
 swd$treeID<-paste(swd$n, swd$plot, swd$square, swd$transect, sep = "_") # creation of treelwdID
 # convert to julian date for the new lwd1's data
@@ -331,14 +331,14 @@ colnames(tabx)[10]="quadrat"
 tabx$treeID<-paste(tabx$plot, tabx$subplot, tabx$quadrat, tabx$n, sep = "_")
 tabx$dateJ<-julian(strptime(tabx$DATE, "%d/%m/%Y"))
 tabx$plot<-as.character(tabx$plot)
-tabx[tabx$plot=="1 ouest",]$plot<-"1W"
-tabx[tabx$plot=="2 ouest",]$plot<-"2W"
-tabx[tabx$plot=="2 OUEST",]$plot<-"2W"
-tabx[tabx$plot=="2 Est",]$plot<-"2E"
-tabx[tabx$plot=="2 EST",]$plot<-"2E"
-tabx[tabx$plot=="1 EST",]$plot<-"1E"
-tabx[tabx$plot=="1 OUEST",]$plot<-"1W"
-tabx[tabx$plot=="1 OESUT",]$plot<-"1W"
+tabx[tabx$plot=="1 ouest",]$plot<-"WEST-1"
+tabx[tabx$plot=="2 ouest",]$plot<-"WEST-2"
+tabx[tabx$plot=="2 OUEST",]$plot<-"WEST-2"
+tabx[tabx$plot=="2 Est",]$plot<-"EAST-2"
+tabx[tabx$plot=="2 EST",]$plot<-"EAST-2"
+tabx[tabx$plot=="1 EST",]$plot<-"EAST-1"
+tabx[tabx$plot=="1 OUEST",]$plot<-"WEST-1"
+tabx[tabx$plot=="1 OESUT",]$plot<-"WEST-1"
 ```
 
 ## Descriptive Statistics
@@ -401,17 +401,70 @@ ggplot(tabx, aes(x = h, fill = plot)) +
 
 ## Basic Checks
 
-## Results from BIOMASS package
-
-```{r lound data, include=TRUE, echo=FALSE}
+```{r lound data, include=TRUE, echo=FALSE, warning=FALSE}
 library(ggplot2)
 loun <- read.csv("~/Library/Mobile Documents/com~apple~CloudDocs/Bruno/Publications/Congo/Congo/analyses/Loun.csv")
 loun$bloc_parcelle<-as.character(loun$bloc_parcelle)
-loun[loun$bloc_parcelle=="bloc est/parcelle 1",]$bloc_parcelle<-"1E"
-loun[loun$bloc_parcelle=="bloc est/parcelle 2",]$bloc_parcelle<-"2E"
-loun[loun$bloc_parcelle=="bloc ouest/parcelle 1",]$bloc_parcelle<-"1W"
-loun[loun$bloc_parcelle=="bloc ouest/parcelle 2",]$bloc_parcelle<-"2W"
+loun[loun$bloc_parcelle=="bloc est/parcelle 1",]$bloc_parcelle<-"EAST-1"
+loun[loun$bloc_parcelle=="bloc est/parcelle 2",]$bloc_parcelle<-"EAST-2"
+loun[loun$bloc_parcelle=="bloc ouest/parcelle 1",]$bloc_parcelle<-"WEST-1"
+loun[loun$bloc_parcelle=="bloc ouest/parcelle 2",]$bloc_parcelle<-"WEST-2"
+ggplot(loun, aes(x = diametre_camp2)) +
+        geom_histogram(binwidth = 0.05, alpha = 1)+
+      labs(title="DBH Distribution", 
+         subtitle="Observed Absolute Frequencies, squared-root scale on x_axis",
+         caption="Source: DynAfFor",
+         x="DBH (cm)",
+         y="Absolute Frequencies")+scale_x_sqrt()+ facet_wrap(~bloc_parcelle)
+```
+
+```{r wsg, include=TRUE, echo=FALSE, warning=FALSE}
 library(BIOMASS)
+loun$genus<-sapply(strsplit(as.character(loun$nom_scientifique_valid), "\\s+"), function (x) x[1])
+loun$species<-sapply(strsplit(as.character(loun$nom_scientifique_valid), "\\s+"), function (x) x[2])
+wsg<-getWoodDensity(loun$genus,loun$species, stand=loun$carre)
+loun$wsg<-wsg$meanWD
+loun$wsgSD<-wsg$sdWD
+ggplot(loun, aes(x = wsg)) +
+        geom_histogram(binwidth = 0.05, alpha = 1)+
+      labs(title="Wood Density Distribution", 
+         subtitle="Observed Absolute Frequencies",
+         caption="Source: DynAfFor",
+         x="WSG (g.cm^-3)",
+         y="Absolute Frequencies")+ facet_wrap(~bloc_parcelle)
+```
+
+## Results from BIOMASS package
+
+```{r agb, include=TRUE, echo=FALSE}
+HDmodel <- modelHD(D = loun$diametre_camp2, H = loun$hauteur_camp2/10, method = "weibull")
+#resultMC <- by(loun, loun$carre, 
+#    function(x) AGBmonteCarlo(D = x$diametre_camp2, WD = x$wsg, errWD = x$wsgSD, 
+#    HDmodel = HDmodel, Dpropag = "chave2004", n=1000))
+#save(resultMC, file="resultMC.RData")
+load("resultMC.RData")
+plot<-data.frame(unique(data.frame(plot=lwd$plot, subplot=lwd$subplot)))
+plot$subplot<-as.factor(plot$subplot)
+plot$AGB<- as.numeric(unlist(sapply(resultMC, "[", 1)))
+plot$AGB_low<-sapply(sapply(resultMC, "[", 4), function (x) x[1])
+plot$AGB_high<-sapply(sapply(resultMC, "[", 4), function (x) x[2])
+ggplot(plot, aes(x = subplot, y = AGB, color=plot)) +
+   geom_errorbar(aes(ymin = AGB_low,
+                     ymax = AGB_high),
+                     width = 0.05, 
+                     size  = 0.5) +
+   geom_point(shape = 15, size  = 4)+
+        labs(title="AboveGround Biomass Distribution", 
+         subtitle="Estimated with BIOMASS package and full error propagation",
+         caption="Source: DynAfFor",
+         x="Subplot Number",
+         y=expression(AGB~(Mg.ha^{-1}))) + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+ggplot(plot, aes(AGB)) + geom_density(aes(fill=factor(plot)), alpha=0.5, bw=20) + 
+  labs(title="AboveGround Biomass Density per Plot", 
+       subtitle="Estimated with BIOMASS package and full error propagation",
+       caption="Source: DynAfFor",
+       x=expression(AGB~(Mg.ha^{-1})),
+       fill="# Plot Names")
 ```
 
 
