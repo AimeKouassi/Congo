@@ -43,13 +43,17 @@ Descriptive Statistics
 
 ![](CarbonPools_files/figure-markdown_github/D%20density-1.png)
 
-#### DBH
+#### Diameter
 
 ![](CarbonPools_files/figure-markdown_github/DBH%20distribution-1.png)
 
 #### Length
 
 ![](CarbonPools_files/figure-markdown_github/Length%20distribution-1.png)
+
+#### Diameter-Length
+
+![](CarbonPools_files/figure-markdown_github/DBH-Length-1.png)
 
 ### Standing Deadwood
 
@@ -63,7 +67,7 @@ Descriptive Statistics
 
 #### Height
 
-![](CarbonPools_files/figure-markdown_github/standing%20Height-1.png) \#\# Estimating Carbon Pool Values
+![](CarbonPools_files/figure-markdown_github/standing%20Height-1.png) \#\#\#\# Diameter-Height ![](CarbonPools_files/figure-markdown_github/Height-Diameter-1.png) \#\# Estimating Carbon Pool Values
 
 Estimating Carbon Pool Variabilities
 ------------------------------------

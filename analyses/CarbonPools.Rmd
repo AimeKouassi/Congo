@@ -67,7 +67,8 @@ lwd[lwd$plot=="1 Ouest",]$plot<-"WEST-1"
 lwd[lwd$plot=="2 Ouest",]$plot<-"WEST-2"
 lwd[lwd$plot=="1 Est",]$plot<-"EAST-1"
 lwd[lwd$plot=="2 Est",]$plot<-"EAST-2"
-lwd$treeID<-paste(lwd$n, lwd$plot, lwd$square, lwd$transect, sep = "_") # creation of treelwdID
+lwd[lwd$subplot == 113 & lwd$transect==3  & lwd$direction==0,]$n=3
+lwd$treeID<-paste(lwd$plot, lwd$subplot, lwd$transect, lwd$n, sep = "_") # creation of treelwdID
 # convert to julian date for the new lwd1's data
 library(date)
 lwd$dateJ<-julian(strptime(lwd$date, "%d/%m/%Y"))
@@ -75,7 +76,10 @@ lwd$dateJ<-julian(strptime(lwd$date, "%d/%m/%Y"))
 lwd$Dh[lwd$Dh == 0]= NA
 # replace 0's by NA's on lwd$Circumf
 lwd$circumf[lwd$circumf == 0]= NA
-# calculation of geometric mean diameters Dg               		
+# calculation of geometric mean diameters Dg   
+lwd$Dv[lwd$treeID == "WEST-1_114_1_1"]= lwd$circumf[lwd$treeID == "WEST-1_114_1_1"]/pi
+lwd$Dv[lwd$treeID == "WEST-1_114_1_2"]= lwd$circumf[lwd$treeID == "WEST-1_114_1_2"]/pi
+lwd$Dv[lwd$treeID == "WEST-1_114_1_3"]= lwd$circumf[lwd$treeID == "WEST-1_114_1_3"]/pi
 lwd$Dg=exp(rowMeans(log(data.frame(lwd$Dh,lwd$Dv)), na.rm=TRUE)) 
 ```
 
@@ -119,21 +123,10 @@ d326<-read.csv2("d326.csv",header = TRUE)
 swd<-rbind(d93, d94, d95, d113, d114, d115, d123, d124, d125, d133, d134, d135, 
            d143, d144, d145, d163, d164, d165, d177, d178, d179, d197, d198, d199, d217, 
            d218, d219, d284, d285, d286, d304, d305, d306, d324, d325, d326)  # swd's data combinations = swd
-# omit value's adding on swd
-swd$CIRCdbh[45]= 34
-swd$CIRCdbh[291]= 82
-swd$CIRCdbh[339]= 33
 # rename / arrange some column's name on swd's data
 colnames(swd)[1]<-"n"
 colnames(swd)[2]<-"x"
 colnames(swd)[3]<-"y"
-colnames(swd)[4]<-"DBH"
-colnames(swd)[5]<-"Dlow"
-colnames(swd)[6]<-"Dhigh"
-# calculate diameter
-swd$DBH=swd$DBH/pi
-swd$Dlow=swd$Dlow/pi
-swd$Dhigh=swd$Dhigh/pi
 colnames(swd)[13]<-"subplot"
 swd$plot<-as.character(swd$plot)
 swd[swd$plot=="1 Ouest",]$plot<-"WEST-1"
@@ -141,7 +134,24 @@ swd[swd$plot=="2 Ouest",]$plot<-"WEST-2"
 swd[swd$plot=="1 Est",]$plot<-"EAST-1"
 swd[swd$plot=="2 Est",]$plot<-"EAST-2"
 # creation of treelwdID
-swd$treeID<-paste(swd$n, swd$plot, swd$square, swd$transect, sep = "_") # creation of treelwdID
+swd[swd$subplot == 324 & swd$transect==2  & swd$angle==206.5,]$n=2
+swd$treeID<-paste(swd$plot, swd$subplot, swd$transect, swd$n, sep = "_")    # creation of treelwdID
+# omit value's adding on swd                                                          #
+swd$x[swd$treeID == "EAST-1_145_3_1"]= 29
+swd$y[swd$treeID == "EAST-1_145_3_1"]= 7
+swd$CIRCdbh[swd$treeID == "EAST-1_145_3_1"]= 205.5
+swd$H[swd$treeID == "EAST-1_145_3_1"]= 11.5
+swd$decay[swd$treeID == "EAST-1_145_3_1"]= 4
+swd$CIRCdbh[swd$treeID == "WEST-1_114_1_1"]= 34
+swd$CIRCdbh[swd$treeID == "EAST-2_285_2_1"]= 82
+swd$CIRCdbh[swd$treeID == "EAST-2_324_2_1"]= 33
+colnames(swd)[4]<-"DBH"
+colnames(swd)[5]<-"Dlow"
+colnames(swd)[6]<-"Dhigh"
+# calculate diameter
+swd$DBH=swd$DBH/pi
+swd$Dlow=swd$Dlow/pi
+swd$Dhigh=swd$Dhigh/pi
 # convert to julian date for the new lwd1's data
 library(date)
 swd$dateJ<-julian(strptime(swd$date, "%d/%m/%Y"))
@@ -186,7 +196,7 @@ ggplot(LWD_subplot, aes(N)) + geom_density(aes(fill=factor(plot)), alpha=0.5) +
 
 ```
 
-#### DBH
+#### Diameter
 
 ```{r DBH distribution, include=TRUE, echo=FALSE}
 library(ggplot2)
@@ -214,6 +224,15 @@ ggplot(lwd, aes(x = L, fill = plot)) +
        fill="# Plot Names")
 ```
        
+#### Diameter-Length
+```{r DBH-Length, include=TRUE, echo=FALSE}
+ggplot(lwd, aes(y = L, x = Dg)) + geom_point()  +
+  labs(title="Length versus Diameter", 
+       subtitle="Each point is an individual tree",
+       caption="Source: DynAfFor",
+       x="Tree Diameter (cm)",
+       y="Tree Length (m)")
+```
 
 ### Standing Deadwood
 #### Density
@@ -260,6 +279,15 @@ ggplot(swd, aes(x = H, fill = plot)) +
        x="Height (m)",
        fill="# Plot Names")
 
+```
+#### Diameter-Height
+```{r Height-Diameter, include=TRUE, echo=FALSE}
+ggplot(lwd, aes(y = L, x = Dg)) + geom_point()  +
+  labs(title="Height versus Diameter", 
+       subtitle="Each point is an individual tree",
+       caption="Source: DynAfFor",
+       x="Tree Diameter (cm)",
+       y="Tree Height (m)")
 ```
 ## Estimating Carbon Pool Values
 
@@ -437,6 +465,8 @@ ggplot(loun, aes(x = wsg)) +
 ## Results from BIOMASS package
 
 ```{r agb, include=TRUE, echo=FALSE}
+library(BIOMASS)
+library(ggplot2)
 HDmodel <- modelHD(D = loun$diametre_camp2, H = loun$hauteur_camp2/10, method = "weibull")
 #resultMC <- by(loun, loun$carre, 
 #    function(x) AGBmonteCarlo(D = x$diametre_camp2, WD = x$wsg, errWD = x$wsgSD, 
