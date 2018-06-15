@@ -92,8 +92,19 @@ Descriptive Statistics
 
 ### Basic Correlations
 
+    FALSE `geom_smooth()` using method = 'gam'
+
+![](CarbonPools_files/figure-markdown_github/SS%20dbh%20height-1.png)
+
 Estimating Carbon Pool Values
 -----------------------------
+
+![](CarbonPools_files/figure-markdown_github/agb%20SS-1.png)
+
+    ## The reference dataset contains 16467 wood density values 
+    ## Your taxonomic table contains 410 taxa
+
+![](CarbonPools_files/figure-markdown_github/agb%20SS-2.png)
 
 Estimating Carbon Pool Variabilities
 ------------------------------------
