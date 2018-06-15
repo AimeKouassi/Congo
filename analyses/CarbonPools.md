@@ -8,6 +8,7 @@ Lattifa Fofana, Aimé Kouassi, Eric Forni, Sylvie Gourlet-Fleury & Bruno Héraul
     -   [Descriptive Statistics](#descriptive-statistics)
         -   [Lying Deadwood](#lying-deadwood)
         -   [Standing Deadwood](#standing-deadwood)
+        -   [Lying Volumes](#lying-volumes)
     -   [Estimating Carbon Pool Variabilities](#estimating-carbon-pool-variabilities)
 -   [Small Stems](#small-stems)
     -   [Descriptive Statistics](#descriptive-statistics-1)
@@ -21,6 +22,7 @@ Lattifa Fofana, Aimé Kouassi, Eric Forni, Sylvie Gourlet-Fleury & Bruno Héraul
     -   [Basic Checks](#basic-checks)
     -   [Results from BIOMASS package](#results-from-biomass-package)
 -   [Linking the 3 carbon pools together](#linking-the-3-carbon-pools-together)
+    -   [Small Stems versus Large Stems](#small-stems-versus-large-stems)
 
 Research Questions
 ==================
@@ -68,6 +70,10 @@ Descriptive Statistics
 #### Height
 
 ![](CarbonPools_files/figure-markdown_github/standing%20Height-1.png) \#\#\#\# Diameter-Height ![](CarbonPools_files/figure-markdown_github/Height-Diameter-1.png) \#\# Estimating Carbon Pool Values
+
+### Lying Volumes
+
+![](CarbonPools_files/figure-markdown_github/Lying%20Volumes-1.png) \#\#\# Standing Volumes ![](CarbonPools_files/figure-markdown_github/Standing%20Volumes-1.png)
 
 Estimating Carbon Pool Variabilities
 ------------------------------------
@@ -129,3 +135,10 @@ Results from BIOMASS package
 
 Linking the 3 carbon pools together
 ===================================
+
+Small Stems versus Large Stems
+------------------------------
+
+    ## Warning: Ignoring unknown aesthetics: xmin, xmax
+
+![](CarbonPools_files/figure-markdown_github/ss%20vs%20ls-1.png)

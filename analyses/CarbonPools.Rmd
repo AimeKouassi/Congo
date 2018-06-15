@@ -77,6 +77,8 @@ lwd$Dh[lwd$Dh == 0]= NA
 # replace 0's by NA's on lwd$Circumf
 lwd$circumf[lwd$circumf == 0]= NA
 # calculation of geometric mean diameters Dg   
+lwd$Dv[lwd$treeID == "WEST-1_114_4_1"]= lwd$circumf[lwd$treeID == "WEST-1_114_4_1"]/pi
+lwd$Dv[lwd$treeID == "WEST-1_114_4_2"]= lwd$circumf[lwd$treeID == "WEST-1_114_4_2"]/pi
 lwd$Dv[lwd$treeID == "WEST-1_114_1_1"]= lwd$circumf[lwd$treeID == "WEST-1_114_1_1"]/pi
 lwd$Dv[lwd$treeID == "WEST-1_114_1_2"]= lwd$circumf[lwd$treeID == "WEST-1_114_1_2"]/pi
 lwd$Dv[lwd$treeID == "WEST-1_114_1_3"]= lwd$circumf[lwd$treeID == "WEST-1_114_1_3"]/pi
@@ -282,14 +284,45 @@ ggplot(swd, aes(x = H, fill = plot)) +
 ```
 #### Diameter-Height
 ```{r Height-Diameter, include=TRUE, echo=FALSE}
-ggplot(lwd, aes(y = L, x = Dg)) + geom_point()  +
+library(ggplot2)
+ggplot(swd, aes(y = H, x = db)) + geom_point()  +
   labs(title="Height versus Diameter", 
        subtitle="Each point is an individual tree",
        caption="Source: DynAfFor",
        x="Tree Diameter (cm)",
-       y="Tree Height (m)")
+       y="Tree Height (m)")    
 ```
 ## Estimating Carbon Pool Values
+
+### Lying Volumes
+```{r Lying Volumes, include=TRUE, echo=FALSE}
+LWD_subplot<-LWD_subplot[order(as.numeric(as.character(LWD_subplot$subplot))),]
+LV <- by(lwd, lwd$subplot, 
+    function(x) sum((x$Dg)^2)*pi^2/(8*111.7*4))
+LWD_subplot$LV<-as.numeric(unlist(sapply(LV, "[", 1)))
+
+ggplot(LWD_subplot, aes(LV)) + geom_density(aes(fill=factor(plot)), alpha=0.5) + 
+  labs(title="Distribution of Lying Deadwood Volumes", 
+       subtitle="Volumes of lying deadwood per hectare, grouped per plot",
+       caption="Source: DynAfFor",
+       x=expression(Volumes~(m3.ha^{-1})),
+       fill="# Plot Names")
+```
+### Standing Volumes
+```{r Standing Volumes, include=TRUE, echo=FALSE}
+SWD_subplot<-SWD_subplot[order(as.numeric(as.character(SWD_subplot$subplot))),]
+SV <- by(swd, swd$subplot, 
+    function(x) sum(x$H*((pi*((x$db/100)/2)^2 + pi*((x$dt/100)/2)^2)/2))) / ((4*111.7*20)-(4*20*20)) * 10000
+
+SWD_subplot$SV<-as.numeric(unlist(sapply(SV, "[", 1)))
+
+ggplot(SWD_subplot, aes(SV)) + geom_density(aes(fill=factor(plot)), alpha=0.5) + 
+  labs(title="Distribution of Standing Deadwood Volumes", 
+       subtitle="Volumes of standing deadwood per hectare, grouped per plot",
+       caption="Source: DynAfFor",
+       x=expression(Volumes~(m3.ha^{-1})),
+       fill="# Plot Names")
+```
 
 ## Estimating Carbon Pool Variabilities
 
@@ -420,8 +453,61 @@ ggplot(tabx, aes(x = h, fill = plot)) +
 ```
 
 ### Basic Correlations
- 
+
+```{r SS dbh height, include=TRUE, echo=FALSE, comment=FALSE}
+library(ggplot2)
+ggplot(data = tabx) +
+  geom_point(mapping = aes(x = DBH, y = h)) +
+  geom_smooth(mapping = aes(x = DBH, y = h))+
+      labs(title="Height versus DBH", 
+         subtitle="Each point is an individual tree",
+         caption="Source: DynAfFor",
+         x="DBH (cm",
+         y="Height (m)",
+         fill="# Plot Names")
+
+```
+
 ## Estimating Carbon Pool Values
+
+```{r agb SS, include=TRUE, echo=FALSE}
+library(BIOMASS)
+library(ggplot2)
+HDmodelSS <- modelHD(D = tabx$DBH, H = tabx$h, method="log2", drawGraph = TRUE)
+#test<-correctTaxo(tabx$g, tabx$sp, score = 0.5)
+wsgSS<-getWoodDensity(tabx$g,tabx$sp, stand=tabx$subplot)
+tabx$wsg<-wsgSS$meanWD
+tabx$wsgSD<-wsgSS$sdWD
+#resultMCss <- by(tabx, tabx$subplot, 
+#    function(x) AGBmonteCarlo(D = x$DBH, WD = x$wsg, errWD = x$wsgSD, 
+#    HDmodel = HDmodelSS, Dpropag = "chave2004", n=1000))
+#save(resultMCss, file="resultMCss.RData")
+load("resultMCss.RData")
+SS_quadrat$subplot<-as.numeric(as.character(SS_quadrat$subplot))
+SS_quadrat<-SS_quadrat[order(SS_quadrat$subplot),]
+SS_quadrat$AGB<- as.numeric(unlist(sapply(resultMCss, "[", 1)))
+SS_quadrat$AGB_low<-sapply(sapply(resultMCss, "[", 4), function (x) x[1])
+SS_quadrat$AGB_high<-sapply(sapply(resultMCss, "[", 4), function (x) x[2])
+# correct for subplot with 4 quadrats
+SS_quadrat[SS_quadrat$subplot %in% c(114,144,198,305),]$AGB<-SS_quadrat[SS_quadrat$subplot %in% c(114,144,198,305),]$AGB/4
+SS_quadrat[SS_quadrat$subplot %in% c(114,144,198,305),]$AGB_low<-SS_quadrat[SS_quadrat$subplot %in% c(114,144,198,305),]$AGB_low/4
+SS_quadrat[SS_quadrat$subplot %in% c(114,144,198,305),]$AGB_high<-SS_quadrat[SS_quadrat$subplot %in% c(114,144,198,305),]$AGB_high/4
+SS_quadrat$AGB<-SS_quadrat$AGB/400*10000
+SS_quadrat$AGB_low<-SS_quadrat$AGB_low/400*10000
+SS_quadrat$AGB_high<-SS_quadrat$AGB_high/400*10000
+SS_quadrat$subplot<-as.factor(SS_quadrat$subplot)
+ggplot(SS_quadrat, aes(x = subplot, y = AGB, color=plot)) +
+   geom_errorbar(aes(ymin = AGB_low,
+                     ymax = AGB_high),
+                     width = 0.05, 
+                     size  = 0.5) +
+   geom_point(shape = 15, size  = 4)+
+        labs(title="Small Stems Biomass Distribution", 
+         subtitle="Estimated with BIOMASS package and full error propagation",
+         caption="Source: DynAfFor",
+         x="Subplot Number",
+         y=expression(AGB~(Mg.ha^{-1}))) + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+```
 
 ## Estimating Carbon Pool Variabilities
 
@@ -499,5 +585,29 @@ ggplot(plot, aes(AGB)) + geom_density(aes(fill=factor(plot)), alpha=0.5, bw=20) 
 
 
 # Linking the 3 carbon pools together
-
-
+## Small Stems versus Large Stems
+```{r ss vs ls, include=TRUE, echo=FALSE}
+data<-plot
+SS_quadrat1<-SS_quadrat
+SS_quadrat1$plot<-NULL
+SS_quadrat1$AGBss_low<-SS_quadrat1$AGB_low
+SS_quadrat1$AGB_low<-NULL
+SS_quadrat1$AGBss_high<-SS_quadrat1$AGB_high
+SS_quadrat1$AGB_high<-NULL
+SS_quadrat1$AGBss<-SS_quadrat1$AGB
+SS_quadrat1$AGB<-NULL
+data<-merge(plot, SS_quadrat1, by.x="subplot", by.y="subplot")
+ggplot(data, aes(x = AGB, y = AGBss, color=plot)) +
+  geom_errorbar(aes(ymin = AGBss_low,
+                     ymax = AGBss_high,
+                     xmin = AGB_low,
+                     xmax = AGB_high),
+                     width = 0.05, 
+                     size  = 0.5) +
+   geom_point(shape = 15, size  = 4)+
+        labs(title="Small versus Large Stems Biomass", 
+         subtitle="Estimated with BIOMASS package and full error propagation",
+         caption="Source: DynAfFor",
+         x=expression(Large_Stem_AGB~(Mg.ha^{-1})),
+         y=expression(Small_Stem_AGB~(Mg.ha^{-1})))
+```
