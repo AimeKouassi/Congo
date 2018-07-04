@@ -261,7 +261,7 @@ ggplot(lwd, aes(x = Dg, fill = plot)) +
 ```{r Length distribution, include=TRUE, echo=FALSE}
 library(ggplot2)
 ggplot(lwd, aes(x = L, fill = plot)) +
-  geom_histogram(binwidth = 3, alpha = 1, position = "dodge")+
+  geom_density( alpha = 0.5)+
   labs(title="Length Distribution of Lying Deadwood", 
        subtitle="Observed Absolute Frequencies grouped per plot",
        caption="Source: DynAfFor",
@@ -654,7 +654,7 @@ tabx$wsg<-wsgSS$meanWD
 tabx$wsgSD<-wsgSS$sdWD
 #resultMCss <- by(tabx, tabx$subplot, 
 #    function(x) AGBmonteCarlo(D = x$DBH, WD = x$wsg, errWD = x$wsgSD, 
-#    HDmodel = HDmodelSS, Dpropag = "chave2004", n=1000))
+#    coord=coord, Dpropag = "chave2004", n=1000))
 #save(resultMCss, file="resultMCss.RData")
 load("resultMCss.RData")
 SS_quadrat$subplot<-as.numeric(as.character(SS_quadrat$subplot))
@@ -733,10 +733,13 @@ ggplot(loun, aes(x = wsg, color=bloc_parcelle)) +
 ```{r agb, include=TRUE, echo=FALSE}
 library(BIOMASS)
 library(ggplot2)
-HDmodel <- modelHD(D = loun$diametre_camp2, H = loun$hauteur_camp2/10, method = "weibull")
+#HDmodel <- modelHD(D = loun$diametre_camp2, H = loun$hauteur_camp2/10, method = "weibull")
+lat<- 2.22
+long<- 16.40
+coord <- cbind(long, lat)
 #resultMC <- by(loun, loun$carre, 
 #    function(x) AGBmonteCarlo(D = x$diametre_camp2, WD = x$wsg, errWD = x$wsgSD, 
-#    HDmodel = HDmodel, Dpropag = "chave2004", n=1000))
+#    coord=coord, Dpropag = "chave2004", n=100))
 #save(resultMC, file="resultMC.RData")
 load("resultMC.RData")
 plot<-data.frame(unique(data.frame(plot=lwd$plot, subplot=lwd$subplot)))
