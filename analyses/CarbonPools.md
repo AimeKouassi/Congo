@@ -26,6 +26,8 @@ Lattifa Fofana, Aimé Kouassi, Eric Forni, Sylvie Gourlet-Fleury & Bruno Héraul
     -   [Results from BIOMASS package](#results-from-biomass-package)
 -   [Linking the 3 carbon pools together](#linking-the-3-carbon-pools-together)
     -   [Small Stems versus Large Stems](#small-stems-versus-large-stems)
+    -   [DeadWood versus Large Stems](#deadwood-versus-large-stems)
+    -   [DeadWood versus Small Stems](#deadwood-versus-small-stems)
 
 Research Questions
 ==================
@@ -280,3 +282,29 @@ Small Stems versus Large Stems
     ## `geom_smooth()` using method = 'loess'
 
 ![](CarbonPools_files/figure-markdown_github/ss%20vs%20ls-1.png)
+
+DeadWood versus Large Stems
+---------------------------
+
+    ## `geom_smooth()` using method = 'loess'
+
+![](CarbonPools_files/figure-markdown_github/dw%20vs%20ls-1.png)
+
+-   Hypothesis - From the literature, decay rates are quite high in humid tropical forests so that the amount of deadwood is far below the large stem AGB. No obvious link between deadwood biomass and AGB is expected.
+
+-   Results - A slight positive tendancy
+
+-   Discussion - No recent large blow-downs that could have induced a negative relationship between the 2 pools.
+
+DeadWood versus Small Stems
+---------------------------
+
+    ## `geom_smooth()` using method = 'loess'
+
+![](CarbonPools_files/figure-markdown_github/dw%20vs%20ss-1.png)
+
+-   Hypothesis - A positive link between small stems C pool and deadwood C pools: (i) large small\_stem and large deadwood C pools : renewing forest patch and (ii) small small\_stem and small deadwood : mature forest patch.
+
+-   Results - nothing obvious
+
+-   Discussion - homogeneous forest with no large differences in maturity levels.

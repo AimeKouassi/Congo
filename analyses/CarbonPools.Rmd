@@ -768,6 +768,7 @@ ggplot(plot, aes(AGB)) + geom_density(aes(fill=factor(plot)), alpha=0.5, bw=20) 
 
 
 # Linking the 3 carbon pools together
+
 ## Small Stems versus Large Stems
 ```{r ss vs ls, include=TRUE, echo=FALSE}
 data<-plot
@@ -795,3 +796,50 @@ ggplot(data, aes(x = AGB, y = AGBss)) +
          x=expression(Large_Stem_AGB~(Mg.ha^{-1})),
          y=expression(Small_Stem_AGB~(Mg.ha^{-1})))
 ```
+
+## DeadWood versus Large Stems
+```{r dw vs ls, include=TRUE, echo=FALSE}
+data<-plot
+DW_LS<-data.frame(plot=data$plot,AGB=data$AGB, subplot=WD$subplot,
+                  DV=WD$V_lv+WD$V_sv) 
+ggplot(DW_LS, aes(x = AGB, y = DV)) +
+  geom_smooth(mapping = aes(x = AGB, y = DV))+
+  geom_point(shape = 15, size  = 4, aes( color=plot))+
+  labs(title="Deadwood volumes versus Large Stems Biomass", 
+       subtitle="volume and AGB per ha, grouped per plot",
+       caption="Source: DynAfFor",
+       x=expression(Large_Stem_AGB~(Mg.ha^{-1})),
+       y=expression(Deadwodd_Volumes~(m3.ha^{-1})))
+
+```
+
+* Hypothesis -  From the literature, decay rates are quite high in humid tropical forests so that the amount of deadwood is far below the large stem AGB. No obvious link between deadwood biomass and AGB is expected.
+
+* Results - A slight positive tendancy
+
+* Discussion - No recent large blow-downs that could have induced a negative relationship between the 2 pools.
+
+## DeadWood versus Small Stems
+```{r dw vs ss, include=TRUE, echo=FALSE}
+data<-plot
+dataSS<-SS_quadrat
+DW_SS<-data.frame(plot=dataSS$plot,AGBss=dataSS$AGB, subplot=WD$subplot,
+                  DV=WD$V_lv+WD$V_sv)
+
+ggplot(DW_SS, aes(x = AGBss, y = DV)) +
+  geom_smooth(mapping = aes(x = AGBss, y = DV))+
+  geom_point(shape = 15, size  = 4, aes( color=plot))+
+  labs(title="Deadwood volumes versus Small Stems Biomass", 
+       subtitle="volume and AGB per ha, grouped per plot",
+       caption="Source: DynAfFor",
+       x=expression(Small_Stems_AGB~(Mg.ha^{-1})),
+       y=expression(Deadwodd_Volumes~(m3.ha^{-1})))
+
+```
+
+* Hypothesis -  A positive link between small stems C pool and deadwood C pools: (i) large small_stem and large deadwood C pools : renewing forest patch and (ii) small small_stem and small deadwood : mature forest patch.
+
+* Results - nothing obvious
+
+* Discussion - homogeneous forest with no large differences in maturity levels.
+
